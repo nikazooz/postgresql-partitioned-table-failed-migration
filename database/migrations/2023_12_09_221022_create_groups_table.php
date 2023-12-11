@@ -13,17 +13,18 @@ return new class extends Migration
     public function up(): void
     {
         DB::unprepared(<<<'SQL'
-            CREATE TABLE IF NOT EXISTS groups (
+            CREATE TABLE groups (
                 id BIGSERIAL,
                 tenant_id BIGINT,
+                name VARCHAR,
                 PRIMARY KEY (id, tenant_id)
             ) PARTITION BY HASH (tenant_id);
 
-            CREATE TABLE IF NOT EXISTS groups_1
+            CREATE TABLE groups_1
             PARTITION OF groups
             FOR VALUES WITH (MODULUS 2, REMAINDER 0);
 
-            CREATE TABLE IF NOT EXISTS groups_2
+            CREATE TABLE groups_2
             PARTITION OF groups
             FOR VALUES WITH (MODULUS 2, REMAINDER 1);
         SQL);
